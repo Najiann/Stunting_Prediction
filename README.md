@@ -1,19 +1,51 @@
-# Dokumentasi Proyek
-## Stunting Prediction (Laravel + FastAPI Machine Learning)
+# Stunting Prediction
+## Laravel Web Application with FastAPI Machine Learning Integration
 
-## Deskripsi
+Repositori ini merupakan hasil pengembangan dari proyek **Dev_Weekend_WD** yang diberikan pada kegiatan **Dev Weekend**.
 
-Repositori ini merupakan hasil pengembangan dari proyek **Dev_Weekend_WD** yang diberikan sebagai proyek awal pada kegiatan Dev Weekend.
+Pengembangan difokuskan pada peningkatan kualitas aplikasi dari sisi **keamanan, arsitektur perangkat lunak, pengalaman pengguna,** serta **integrasi Machine Learning**, tanpa mengubah tujuan utama aplikasi sebagai sistem prediksi risiko stunting pada balita.
 
-Fokus utama pengembangan bukan mengubah tujuan aplikasi, melainkan meningkatkan kualitas aplikasi dari sisi **keamanan, arsitektur perangkat lunak, pengalaman pengguna,** serta **integrasi Machine Learning** agar lebih siap digunakan pada kondisi nyata (*production-ready*).
+---
+
+## Repository Terkait
+
+Proyek ini terdiri dari dua repositori yang saling terintegrasi.
+
+### 1. Repository Aplikasi Web (Laravel)
+
+Repository ini berisi pengembangan aplikasi web yang meliputi:
+
+- Laravel Breeze Authentication
+- Dashboard
+- Riwayat Prediksi
+- Integrasi FastAPI
+- Manajemen Data
+- UI/UX
+- Routing & Authorization
+
+### 2. Repository Machine Learning
+
+Repository Machine Learning berisi seluruh proses pengembangan model, mulai dari:
+
+- Exploratory Data Analysis (EDA)
+- Investigasi Data Leakage
+- Penghapusan fitur `risk_score`
+- Hyperparameter Tuning
+- Perbandingan beberapa algoritma Machine Learning
+- Evaluasi Model
+- Deployment menggunakan FastAPI
+
+Repository Machine Learning:
+
+**https://github.com/Najiann/Stunting_Model_ML**
 
 ---
 
 ## Disclaimer
 
-Proyek ini dikembangkan sebagai hasil pembelajaran dan pengembangan pribadi berdasarkan proyek awal yang disediakan oleh mentor.
+Repositori ini dikembangkan sebagai hasil pembelajaran dan pengembangan pribadi berdasarkan proyek awal yang disediakan oleh mentor pada kegiatan Dev Weekend.
 
-Selama proses pengembangan, penulis memanfaatkan **Artificial Intelligence (AI)**, termasuk **ChatGPT**, sebagai **asisten pengembangan** untuk membantu proses seperti:
+Selama proses pengembangan, penulis memanfaatkan **Artificial Intelligence (AI)**, termasuk **ChatGPT**, sebagai **asisten pengembangan** untuk membantu berbagai aktivitas, seperti:
 
 - memahami dokumentasi framework
 - brainstorming solusi
@@ -22,31 +54,31 @@ Selama proses pengembangan, penulis memanfaatkan **Artificial Intelligence (AI)*
 - penyusunan dokumentasi
 - pemberian saran implementasi
 
-Seluruh keputusan desain sistem, implementasi fitur, modifikasi kode, pengujian, proses debugging, hingga validasi hasil tetap dilakukan oleh penulis. AI digunakan sebagai alat bantu, bukan sebagai pengganti proses pengembangan.
+Seluruh keputusan arsitektur sistem, implementasi fitur, pengembangan model Machine Learning, proses debugging, pengujian, validasi hasil, hingga kode akhir tetap dilakukan, ditinjau, dan diputuskan oleh penulis. AI digunakan sebagai alat bantu selama proses pengembangan, bukan sebagai pengganti pengembang.
 
 ---
 
 # Ringkasan Perubahan
 
-| Aspek | Versi Awal (Mentor) | Versi Pengembangan |
+| Aspek | Versi Awal (Dev_Weekend_WD) | Versi Pengembangan |
 |------|------|------|
-| Autentikasi | Tidak ada | Laravel Breeze |
-| Kepemilikan Data | Global | Berdasarkan `user_id` |
-| Otorisasi | Tidak ada | Validasi kepemilikan data (403) |
+| Autentikasi | Tidak ada | Laravel Breeze (Login, Register, Verifikasi Email, Reset Password) |
+| Kepemilikan Data | Seluruh pengguna dapat melihat semua data | Data dipisahkan berdasarkan `user_id` |
+| Otorisasi | Tidak ada | Validasi kepemilikan data menggunakan HTTP 403 |
 | Routing | Manual | RESTful `Route::resource()` |
 | CRUD | Create & Read | Create, Read, Delete |
-| Riwayat Prediksi | Tabel sederhana | Pencarian, filter, statistik |
-| Integrasi ML | Menggunakan `risk_score` | `risk_score` dihapus |
-| API Service | Penanganan error dasar | Validasi response & exception handling |
-| UI | Halaman sederhana | Blade Layout + Tailwind + Vite |
-| Landing Page | Tidak ada | Ditambahkan |
+| Riwayat Prediksi | Tabel sederhana | Search, Filter, Pagination, Statistik |
+| Integrasi Machine Learning | Menggunakan `risk_score` | `risk_score` dihapus dari seluruh alur prediksi |
+| API Service | Penanganan error dasar | Validasi response, Exception Handling, Timeout |
+| UI | Halaman Blade sederhana | Layout, Components, Tailwind CSS, Vite |
+| Landing Page | Tidak ada | Landing Page kustom |
 | Database | `patient_id` | `user_id` + Foreign Key |
 
 ---
 
-# Detail Perubahan
+# Detail Pengembangan
 
-## 1. Menambahkan Sistem Autentikasi
+## 1. Sistem Autentikasi
 
 ### Perubahan
 
@@ -60,22 +92,22 @@ Menambahkan Laravel Breeze sehingga aplikasi memiliki fitur:
 
 ### Alasan
 
-Data yang dikelola merupakan data kesehatan balita sehingga akses aplikasi perlu dibatasi kepada pengguna yang telah terautentikasi.
+Data yang diproses merupakan data kesehatan balita sehingga akses aplikasi perlu dibatasi kepada pengguna yang telah terautentikasi.
 
 ---
 
-## 2. Kepemilikan Data Berdasarkan User
+## 2. Kepemilikan Data Berdasarkan Pengguna
 
 ### Perubahan
 
 - Mengganti `patient_id` menjadi `user_id`
-- Menambahkan relasi foreign key
-- Seluruh data prediksi hanya dapat diakses oleh pemilik akun
+- Menambahkan relasi Foreign Key
+- Riwayat prediksi hanya dapat diakses oleh pemilik akun
 - Menambahkan validasi kepemilikan pada `show()` dan `destroy()`
 
 ### Alasan
 
-Mencegah pengguna mengakses data milik pengguna lain (IDOR) serta menjaga privasi data.
+Perubahan ini dilakukan untuk menjaga privasi data serta mencegah kerentanan **Insecure Direct Object Reference (IDOR)**, yaitu kondisi ketika pengguna dapat mengakses data milik pengguna lain hanya dengan memanipulasi URL.
 
 ---
 
@@ -83,17 +115,17 @@ Mencegah pengguna mengakses data milik pengguna lain (IDOR) serta menjaga privas
 
 ### Perubahan
 
-Mengubah routing manual menjadi:
+Routing diubah dari definisi manual menjadi Resource Route Laravel.
 
 ```php
-Route::middleware(['auth','verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('stunting', StuntingPredictionController::class);
 });
 ```
 
 ### Alasan
 
-Mengikuti standar Laravel, mengurangi duplikasi kode, dan mempermudah pengembangan fitur berikutnya.
+Mengikuti standar Laravel sehingga struktur aplikasi lebih rapi, mengurangi duplikasi kode, dan mempermudah pengembangan fitur selanjutnya.
 
 ---
 
@@ -101,37 +133,41 @@ Mengikuti standar Laravel, mengurangi duplikasi kode, dan mempermudah pengembang
 
 ### Perubahan
 
-Menambahkan:
+Menambahkan fitur:
 
-- pencarian nama balita
-- filter status
-- statistik prediksi
-- pagination
+- Pencarian berdasarkan nama balita
+- Filter status prediksi
+- Pagination
+- Statistik jumlah prediksi
+- Statistik jumlah stunting
+- Statistik jumlah tidak stunting
 
 ### Alasan
 
-Mempermudah pengguna mencari data ketika jumlah riwayat semakin banyak.
+Semakin banyak data yang tersimpan, semakin penting kemampuan mencari dan memfilter data agar aplikasi tetap mudah digunakan.
 
 ---
 
-## 5. Menghapus `risk_score`
+## 5. Penghapusan `risk_score`
 
 ### Perubahan
 
 Field `risk_score` dihapus dari:
 
-- database
-- model
-- form
-- controller
-- payload API
-- proses Machine Learning
+- Database
+- Migration
+- Model
+- Form Input
+- Validation
+- Controller
+- Payload FastAPI
+- Alur Machine Learning
 
 ### Alasan
 
-`risk_score` merupakan nilai turunan yang seharusnya dihitung oleh sistem, bukan dimasukkan secara manual oleh pengguna.
+`risk_score` merupakan nilai turunan yang seharusnya dihasilkan oleh sistem, bukan dimasukkan secara manual oleh pengguna. Penghapusan field ini juga membuat proses input menjadi lebih sederhana dan mengurangi potensi kesalahan pengguna.
 
-Menghapus field ini membuat proses prediksi lebih sederhana serta mengurangi potensi kesalahan input.
+Untuk penjelasan teknis mengenai perubahan model Machine Learning, investigasi data leakage, serta alasan penghapusan `risk_score`, silakan melihat repository Machine Learning yang terpisah.
 
 ---
 
@@ -139,30 +175,31 @@ Menghapus field ini membuat proses prediksi lebih sederhana serta mengurangi pot
 
 ### Perubahan
 
-- Menambahkan penanganan `ConnectionException`
-- Validasi format response API
-- Timeout lebih singkat
-- Pembulatan nilai probabilitas
+- Menambahkan `ConnectionException`
+- Validasi struktur response API
+- Optimasi timeout
+- Pembulatan probabilitas prediksi
 
 ### Alasan
 
-Aplikasi menjadi lebih stabil ketika API mengalami gangguan atau mengembalikan response yang tidak sesuai.
+Aplikasi menjadi lebih stabil ketika server Machine Learning tidak aktif ataupun mengembalikan response yang tidak sesuai.
 
 ---
 
-## 7. Perbaikan Tampilan
+## 7. Penyempurnaan Antarmuka
 
 ### Perubahan
 
 - Blade Layout
 - Blade Components
-- Tailwind CSS + Vite
+- Tailwind CSS
+- Vite
 - Landing Page
 - Design System
 
 ### Alasan
 
-Mengurangi duplikasi kode, mempermudah maintenance, dan memberikan tampilan yang lebih konsisten.
+Mengurangi duplikasi kode, meningkatkan konsistensi tampilan, serta mempermudah proses maintenance.
 
 ---
 
@@ -170,11 +207,11 @@ Mengurangi duplikasi kode, mempermudah maintenance, dan memberikan tampilan yang
 
 ### Perubahan
 
-Menambahkan validasi kepemilikan data sebelum pengguna dapat melihat ataupun menghapus riwayat prediksi.
+Menambahkan validasi kepemilikan data sebelum pengguna dapat melihat maupun menghapus riwayat prediksi.
 
 ### Alasan
 
-Mencegah akses data melalui manipulasi URL.
+Mencegah akses data melalui manipulasi URL sehingga data pengguna tetap terlindungi.
 
 ---
 
@@ -182,35 +219,68 @@ Mencegah akses data melalui manipulasi URL.
 
 ### Perubahan
 
-Menambahkan fitur menghapus riwayat prediksi.
+Menambahkan fitur penghapusan riwayat prediksi.
 
 ### Alasan
 
-Memberikan pengguna kemampuan menghapus data yang salah input ataupun data uji coba.
+Memberikan pengguna kemampuan menghapus data yang salah input ataupun data hasil pengujian.
 
 ---
 
 ## Pengembangan Selanjutnya
 
-Beberapa fitur yang masih dapat dikembangkan antara lain:
+Beberapa fitur yang masih dapat dikembangkan pada aplikasi ini antara lain:
 
 - Edit data prediksi
 - Update data prediksi
-- Role Admin
+- Role Management (Admin & User)
 - Export PDF
 - Export Excel
 - Dashboard Admin
-- Monitoring penggunaan model
+- Monitoring penggunaan model Machine Learning
 
 ---
 
 ## Kesimpulan
 
-Versi pengembangan ini mempertahankan alur utama prediksi stunting yang telah dibuat pada proyek awal, kemudian meningkatkan kualitas aplikasi dari berbagai aspek, yaitu:
+Versi pengembangan ini mempertahankan alur utama prediksi stunting dari proyek awal, kemudian meningkatkan kualitas aplikasi dari berbagai aspek, meliputi:
 
 - Keamanan dan privasi data.
 - Kualitas rekayasa perangkat lunak.
 - Pengalaman pengguna.
 - Integrasi Machine Learning yang lebih baik.
 
-Dengan pengembangan tersebut, aplikasi tidak hanya berfungsi sebagai *proof of concept*, tetapi juga lebih mendekati implementasi aplikasi yang siap digunakan oleh banyak pengguna.
+Dengan berbagai pengembangan tersebut, aplikasi tidak hanya berfungsi sebagai *proof of concept*, tetapi juga lebih mendekati implementasi aplikasi yang aman, terstruktur, mudah dikembangkan, dan siap digunakan oleh banyak pengguna.
+
+---
+
+## Teknologi yang Digunakan
+
+### Backend
+
+- Laravel 12
+- PHP 8
+- MySQL
+
+### Frontend
+
+- Blade
+- Tailwind CSS
+- Alpine.js
+- Vite
+
+### Machine Learning
+
+- FastAPI
+- Scikit-Learn
+- Pandas
+- NumPy
+- Joblib
+
+### Tools
+
+- Composer
+- Node.js
+- npm
+- Git
+- GitHub
