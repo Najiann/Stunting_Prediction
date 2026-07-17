@@ -76,6 +76,11 @@ class StuntingPredictionController extends Controller
 
             $result = $this->service->predict($payload);
 
+            $recommendation = $this->service->generateRecommendation([
+                ...$payload,
+                'prediction_status' => $result['prediction_status'],
+            ]);
+
             $prediction = StuntingPrediction::create([
                 ...$validated,
                 'user_id'                      => auth()->id(),
@@ -83,6 +88,8 @@ class StuntingPredictionController extends Controller
                 'prediction_status'            => $result['prediction_status'],
                 'probability_stunting_percent' => $result['probability_stunting_percent'] ?? null,
                 'predicted_by'                 => auth()->user()?->name ?? 'Guest',
+
+                'ai_recommendation'            => $recommendation,
             ]);
 
             return redirect()

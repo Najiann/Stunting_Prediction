@@ -39,4 +39,14 @@ return [
         'url' => env('STUNTING_API_URL', 'http://127.0.0.1:8001'),
     ],
 
+    'langflow' => [
+
+        'url'=>env('LANGFLOW_URL'),
+
+        'api_key'=>env('LANGFLOW_API_KEY'),
+
+        'flow_id'=>env('LANGFLOW_FLOW_ID'),
+
+    ],
+
 ];

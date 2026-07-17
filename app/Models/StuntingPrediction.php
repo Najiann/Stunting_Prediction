@@ -26,6 +26,7 @@ class StuntingPrediction extends Model
         'prediction_status',
         'probability_stunting_percent',
         'predicted_by',
+        'ai_recommendation',
     ];
 
     public function user(): BelongsTo 
